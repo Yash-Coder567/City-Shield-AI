@@ -7,7 +7,13 @@ const blockchainRoute = require("./routes/blockchain");
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL
+    ? [process.env.FRONTEND_URL, /^https:\/\/.*\.vercel\.app$/]
+    : true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api/threats", threatsRoute);
@@ -18,7 +24,7 @@ app.get("/", (req, res) => {
   res.send("EL-City Shield AI Backend Running");
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
